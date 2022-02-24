@@ -27,8 +27,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Setup Chomp
       uses: guybedford/chomp-action@v1
-      with:
-        version: 0.1.8
     - name: Run Tests
       run: chomp test
 ```
