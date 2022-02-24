@@ -11,4 +11,4 @@ inputs:
     default: 0.1.8
 runs:
   using: 'node16'
-  main: 'install-chomp.js'
+  main: 'dist/index.js'
