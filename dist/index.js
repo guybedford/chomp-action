@@ -1761,6 +1761,14 @@ module.exports = require("util");
 "use strict";
 module.exports = require("worker_threads");
 
+/***/ }),
+
+/***/ 796:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("zlib");
+
 /***/ })
 
 /******/ 	});
@@ -1902,6 +1910,7 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(186);
 const { execSync } = __nccwpck_require__(81);
 const { readFile, writeFile } = __nccwpck_require__(292);
+const { gunzipSync } = __nccwpck_require__(796);
 const path = __nccwpck_require__(17);
 
 (async () => {
@@ -1919,13 +1928,17 @@ const path = __nccwpck_require__(17);
   if (!res.ok)
     throw new Error(`Bad response downloading ${url} - ${res.status}`);
 
-  const buffer = await res.arrayBuffer();
-  await writeFile(`chomp-${version}${ext}`, Buffer.from(buffer));
+  let buffer = Buffer.from(await res.arrayBuffer());
+
+  if (os !== 'windows') {
+    buffer = gunzipSync(buffer);
+  }
+
+  await writeFile(`chomp-${version}${os === 'windows' ? '.zip' : '.tar'}`, buffer);
 
   if (os === 'windows') {
-    execSync(`powershell.exe "Expand-Archive chomp-${version}${ext}"`);
+    execSync(`powershell.exe "Expand-Archive chomp-${version}.zip"`);
   } else {
-    execSync(`gunzip chomp-${version}${ext}`);
     execSync(`tar -xz chomp-${version}.tar`);
   }
 

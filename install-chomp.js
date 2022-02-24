@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const { execSync } = require('child_process');
 const { readFile, writeFile } = require('fs/promises');
+const { gunzipSync } = require('zlib');
 const path = require('path');
 
 (async () => {
@@ -18,13 +19,17 @@ const path = require('path');
   if (!res.ok)
     throw new Error(`Bad response downloading ${url} - ${res.status}`);
 
-  const buffer = await res.arrayBuffer();
-  await writeFile(`chomp-${version}${ext}`, Buffer.from(buffer));
+  let buffer = Buffer.from(await res.arrayBuffer());
+
+  if (os !== 'windows') {
+    buffer = gunzipSync(buffer);
+  }
+
+  await writeFile(`chomp-${version}${os === 'windows' ? '.zip' : '.tar'}`, buffer);
 
   if (os === 'windows') {
-    execSync(`powershell.exe "Expand-Archive chomp-${version}${ext}"`);
+    execSync(`powershell.exe "Expand-Archive chomp-${version}.zip"`);
   } else {
-    execSync(`gunzip chomp-${version}${ext}`);
     execSync(`tar -xz chomp-${version}.tar`);
   }
 
