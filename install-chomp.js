@@ -24,8 +24,8 @@ const path = require('path');
   if (os === 'windows') {
     execSync(`powershell.exe "Expand-Archive chomp-${version}${ext}"`);
   } else {
-    execSync('gunzip chomp-${version}${ext}');
-    execSync('tar -xz chomp-${version}.tar');
+    execSync(`gunzip chomp-${version}${ext}`);
+    execSync(`tar -xz chomp-${version}.tar`);
   }
 
   const githubPath = await readFile(process.env.GITHUB_PATH, 'utf8');

@@ -1925,8 +1925,8 @@ const path = __nccwpck_require__(17);
   if (os === 'windows') {
     execSync(`powershell.exe "Expand-Archive chomp-${version}${ext}"`);
   } else {
-    execSync('gunzip chomp-${version}${ext}');
-    execSync('tar -xz chomp-${version}.tar');
+    execSync(`gunzip chomp-${version}${ext}`);
+    execSync(`tar -xz chomp-${version}.tar`);
   }
 
   const githubPath = await readFile(process.env.GITHUB_PATH, 'utf8');
