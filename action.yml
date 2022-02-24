@@ -1,0 +1,14 @@
+name: 'Install Chomp'
+description: 'Installs the latest Chomp binary'
+author: 'Guy Bedford'
+branding:
+  icon: coffee
+  color: yellow
+inputs:
+  version:
+    description: 'Chomp Version'
+    required: false
+    default: 0.1.8
+runs:
+  using: 'node16'
+  main: 'install-chomp.js'
