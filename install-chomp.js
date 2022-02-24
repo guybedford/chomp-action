@@ -1,4 +1,5 @@
 const core = require('@actions/core');
+const github = require('@actions/github');
 const { execSync } = require('child_process');
 const { readFile, writeFile } = require('fs/promises');
 const { mkdirSync } = require('fs');
@@ -7,7 +8,15 @@ const path = require('path');
 
 (async () => {
   const { default: fetch } = await import('node-fetch');
-  const version = (core.getInput('version') || '').trim() || '0.1.8';
+  let version = (core.getInput('version') || '').trim();
+
+  if (!version) {
+    const res = await fetch(`https://api.github.com/repos/guybedford/chomp/releases/latest`);
+    if (!res.ok)
+      throw new Error(`Unable to lookup version - ${res.status}`);
+    const { name } = await res.json();
+    version = name;
+  }
 
   const os = (process.env.RUNNER_OS || 'linux').toLowerCase();
   if (os !== 'macos' && os !== 'windows' && os !== 'linux')
