@@ -41,7 +41,7 @@ const path = require('path');
     execSync(`powershell.exe "Expand-Archive ../chomp-${version}.zip"`);
   } else {
     mkdirSync(`../chomp-${version}`);
-    execSync(`tar -xf chomp-${version}.tar -C chomp-${version}`);
+    execSync(`tar -xf ../chomp-${version}.tar -C ../chomp-${version}`);
   }
 
   const githubPath = await readFile(process.env.GITHUB_PATH, 'utf8');
