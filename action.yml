@@ -8,7 +8,6 @@ inputs:
   version:
     description: 'Chomp Version'
     required: false
-    default: 0.1.8
 runs:
   using: 'node16'
   main: 'dist/index.js'
