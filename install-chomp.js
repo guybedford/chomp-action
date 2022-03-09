@@ -35,17 +35,17 @@ const path = require('path');
     buffer = gunzipSync(buffer);
   }
 
-  await writeFile(`chomp-${version}${os === 'windows' ? '.zip' : '.tar'}`, buffer);
+  await writeFile(`../chomp-${version}${os === 'windows' ? '.zip' : '.tar'}`, buffer);
 
   if (os === 'windows') {
-    execSync(`powershell.exe "Expand-Archive chomp-${version}.zip"`);
+    execSync(`powershell.exe "Expand-Archive ../chomp-${version}.zip"`);
   } else {
-    mkdirSync(`chomp-${version}`);
+    mkdirSync(`../chomp-${version}`);
     execSync(`tar -xf chomp-${version}.tar -C chomp-${version}`);
   }
 
   const githubPath = await readFile(process.env.GITHUB_PATH, 'utf8');
-  await writeFile(process.env.GITHUB_PATH, path.resolve(`chomp-${version}`) + (os === 'windows' ? ';' : ':') + githubPath);
+  await writeFile(process.env.GITHUB_PATH, path.resolve(`../chomp-${version}`) + (os === 'windows' ? ';' : ':') + githubPath);
 
 })().catch(error => {
   console.error(error);
