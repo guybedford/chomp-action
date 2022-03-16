@@ -1946,7 +1946,7 @@ const path = __nccwpck_require__(17);
   await writeFile(`../chomp-${version}${os === 'windows' ? '.zip' : '.tar'}`, buffer);
 
   if (os === 'windows') {
-    execSync(`powershell.exe "Expand-Archive ../chomp-${version}.zip -Destination-Path ../chomp-${version}"`);
+    execSync(`powershell.exe "Expand-Archive ../chomp-${version}.zip ../chomp-${version}"`);
   } else {
     mkdirSync(`../chomp-${version}`);
     execSync(`tar -xf ../chomp-${version}.tar -C ../chomp-${version}`);
