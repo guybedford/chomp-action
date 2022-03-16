@@ -1,0 +1,7 @@
+version = 0.1
+
+[[task]]
+name = 'build'
+deps = ['install-chomp.js']
+target = 'dist/index.js'
+run = 'ncc build install-chomp.js'
