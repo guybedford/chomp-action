@@ -17,7 +17,7 @@ const path = require('path');
     version = name;
   }
 
-  const os = (process.env.RUNNER_OS || 'linux').toLowerCase();
+  const os = (process.env.RUNNER_OS || (process.platform === 'win32' ? 'windows' : 'linux')).toLowerCase();
   if (os !== 'macos' && os !== 'windows' && os !== 'linux')
     throw new Error(`Unknown OS or unable to determine architecture (${process.env.RUNNER_OS})`);
 
@@ -37,7 +37,7 @@ const path = require('path');
   await writeFile(`../chomp-${version}${os === 'windows' ? '.zip' : '.tar'}`, buffer);
 
   if (os === 'windows') {
-    execSync(`powershell.exe "Expand-Archive ../chomp-${version}.zip"`);
+    execSync(`powershell.exe "Expand-Archive ../chomp-${version}.zip -Destination-Path ../chomp-${version}"`);
   } else {
     mkdirSync(`../chomp-${version}`);
     execSync(`tar -xf ../chomp-${version}.tar -C ../chomp-${version}`);
