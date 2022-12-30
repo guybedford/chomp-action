@@ -10,7 +10,11 @@ const path = require('path');
   let version = (core.getInput('version') || '').trim();
 
   if (!version) {
-    const res = await fetch(`https://api.github.com/repos/guybedford/chomp/releases/latest`);
+    const res = await fetch(`https://api.github.com/repos/guybedford/chomp/releases/latest`, {
+      headers: {
+        'authorization': `Bearer ${process.env.GITHUB_TOKEN}`
+      }
+    });
     if (!res.ok)
       throw new Error(`Unable to lookup version - ${res.status}`);
     const { name } = await res.json();
