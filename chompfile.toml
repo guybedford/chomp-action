@@ -1,5 +1,7 @@
 version = 0.1
 
+default-task = 'build'
+
 [[task]]
 name = 'build'
 deps = ['install-chomp.js']

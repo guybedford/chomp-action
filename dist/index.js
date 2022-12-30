@@ -1918,10 +1918,24 @@ const path = __nccwpck_require__(17);
   const { default: fetch } = await __nccwpck_require__.e(/* import() */ 841).then(__nccwpck_require__.bind(__nccwpck_require__, 841));
   let version = (core.getInput('version') || '').trim();
 
+  if (process.env.GITHUB_TOKEN)
+    console.log(`Bearer token provided`);
+
   if (!version) {
-    const res = await fetch(`https://api.github.com/repos/guybedford/chomp/releases/latest`);
-    if (!res.ok)
+    const res = await fetch(`https://api.github.com/repos/guybedford/chomp/releases/latest`, {
+      headers: {
+        'authorization': `Bearer ${process.env.GITHUB_TOKEN}`
+      }
+    });
+    if (!res.ok) {
+      if (!process.env.GITHUB_TOKEN)
+        console.error(`NO GITHUB TOKEN PROVIDED - Make sure to provide:
+env:
+  GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+
+to GitHub Actions configuration.`);
       throw new Error(`Unable to lookup version - ${res.status}`);
+    }
     const { name } = await res.json();
     version = name;
   }
